@@ -23,18 +23,37 @@ Livraison du code : **Git + GitHub** (`git pull` côté serveur).
 Le cœur de Laravel (`app/`, `.env`, `storage/`, `vendor/`) reste **hors** d'un
 dossier web : seul `public/` est exposé.
 
+> **Valeurs réelles de l'installation en production** (hébergeur *wanekoohost*) :
+> | | |
+> |---|---|
+> | Racine de l'app | `/home/pitssn1/residencekhadija` |
+> | Document Root du sous-domaine | `/home/pitssn1/residencekhadija/public` |
+> | PHP 8.4 (CLI) | `/opt/cpanel/ea-php84/root/usr/bin/php` |
+> | Base / user / hôte MySQL | `pitssn1_residencekhadija` / `residencekhadija` / `localhost` |
+> | Log applicatif | `storage/logs/laravel-AAAA-MM-JJ.log` (channel `daily`) |
+
 ---
 
 ## 1. Pré-requis hébergement (à vérifier avec pits.sn / dans cPanel)
 
 | Élément | Exigence | Où dans cPanel |
 |---|---|---|
-| PHP | **8.3 ou 8.4**, extensions `mbstring intl bcmath pdo_mysql gd fileinfo openssl ctype tokenizer curl` | *MultiPHP Manager* + *MultiPHP INI Editor* / *Select PHP Version* |
+| PHP | **8.4 obligatoire** (le `composer.lock` embarque Symfony 8 → `>= 8.4.1`), extensions `mbstring intl bcmath pdo_mysql gd fileinfo openssl ctype tokenizer curl` | *MultiPHP Manager* (web) **+** PHP CLI, cf. encadré |
 | MySQL / MariaDB | 5.7+ / 10.4+ | *Bases de données MySQL* |
-| Accès shell | **Terminal cPanel** ou **SSH** (pour Composer + Artisan) | *Terminal* / *Accès SSH* |
-| Composer | disponible en ligne de commande (`composer` ou `composer.phar`) | via Terminal |
+| Accès shell | **Terminal cPanel** ou **SSH** | *Terminal* / *Accès SSH* |
+| Composer | en ligne de commande, lancé **sous PHP 8.4** ; sinon `vendor/` pré-construit (annexe B) | via Terminal |
 | Tâches Cron | autorisées | *Tâches Cron* |
 | Git | *Git™ Version Control* présent (recommandé) ou `git` en shell | *Git Version Control* |
+
+> ⚠️ **Web PHP ≠ CLI PHP sur cPanel.** *MultiPHP Manager* ne règle que le PHP
+> **web**. Le `php` du Terminal reste souvent en 8.2/8.3 → `composer` / `php artisan`
+> échouent avec *« requires PHP >= 8.4.1 »*. Corriger la session :
+> ```sh
+> ls -d /opt/cpanel/ea-php8*/root/usr/bin/php /opt/alt/php8*/usr/bin/php 2>/dev/null
+> printf '\nexport PATH="/opt/cpanel/ea-php84/root/usr/bin:$PATH"\n' | tee -a ~/.bashrc ~/.bash_profile
+> ```
+> ou préfixer chaque commande : `PHP=/opt/cpanel/ea-php84/root/usr/bin/php ; $PHP artisan …`
+> `deploy/deploy.sh` détecte le binaire 8.4 automatiquement.
 
 > **Si Terminal/SSH n'est pas disponible :** voir l'annexe B (upload d'un `vendor/`
 > pré-construit par FTP). Tout le reste du guide suppose l'accès shell.
@@ -214,12 +233,11 @@ Une **seule** tâche suffit : le planificateur Laravel déclenche tout le reste
 cPanel → *Tâches Cron* → ajouter :
 
 ```
-* * * * * /usr/local/bin/php /home/CPANELUSER/laravel/residence-khadija/artisan schedule:run >> /dev/null 2>&1
+* * * * * /opt/cpanel/ea-php84/root/usr/bin/php /home/pitssn1/residencekhadija/artisan schedule:run >> /dev/null 2>&1
 ```
 
-- Adapter le chemin de `php` (cPanel → *Select PHP Version* affiche le binaire ;
-  souvent `/usr/local/bin/php` ou `/opt/cpanel/ea-php84/root/usr/bin/php`).
-- Adapter `CPANELUSER`.
+- Utiliser **impérativement** le binaire PHP **8.4** (pas le `php` par défaut, souvent 8.2).
+- Adapter le chemin si l'installation diffère (`ls -d /opt/cpanel/ea-php8*/root/usr/bin/php`).
 - La file tourne donc **par minute** : suffisant pour un hôtel. Un worker
   permanent (Supervisor) n'est pas nécessaire et n'est de toute façon pas
   disponible en mutualisé.
@@ -304,6 +322,12 @@ Si le sous-domaine est figé sur `~/residencekhadija.pits.sn/` :
 
 | Symptôme | Cause probable / correctif |
 |---|---|
+| `500` corps **vide** (`Content-Length: 0`), rien dans `laravel.log` | PHP plante avant Laravel. Le plus souvent : `vendor/autoload.php` absent → `composer install` (annexe B si Composer indispo) ; **ou** `platform_check.php` qui refuse le PHP (< 8.4.1) → mettre le **web** en PHP 8.4 (*MultiPHP Manager*). |
+| `require(... /vendor/autoload.php): Failed to open stream` | `composer install` jamais lancé sur le serveur. |
+| `Composer dependencies require PHP >= 8.4.1. You are running 8.2/8.3` | PHP **CLI** trop vieux → cf. encadré « Web PHP ≠ CLI PHP » du §1. |
+| `503` « maintenance » qui ne part pas | `deploy.sh` interrompu avant `artisan up` → `php artisan up` ; sinon `rm -f storage/framework/down`. |
+| `500` + `SQLiteDatabaseDoesNotExistException` alors que `.env` dit `mysql` | Config figée : `bootstrap/cache/config.php` généré avec un `.env` incomplet. → `rm -f bootstrap/cache/*.php` (sans PHP), **puis** re-`config:cache` seulement une fois le site OK. |
+| `500` + page **stylée** « Un incident technique » | Laravel démarre mais lève une exception → lire `storage/logs/laravel-AAAA-MM-JJ.log` (channel `daily`), pas `laravel.log`. |
 | `500` + page blanche | `storage/logs/` non inscriptible, ou `APP_KEY` vide → étape 5 & 8. Activer temporairement `APP_DEBUG=true` + `php artisan config:clear`. |
 | `1045 Access denied` (migrate) | `DB_USERNAME` → essayer `pitssn1_residencekhadija` (préfixe cPanel). |
 | Redirection HTTPS en boucle | Cloudflare en mode *Flexible* → passer en *Full*, ou retirer le bloc HTTPS de `public/.htaccess`. |
