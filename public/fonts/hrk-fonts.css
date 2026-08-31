@@ -1,0 +1,31 @@
+/*
+| Polices de la charte graphique HRK — auto-hébergées (build-indépendant, hors-ligne OK).
+| Montserrat : titres  ·  Poppins : texte courant.
+| Chargé identiquement par vitrine, PMS /admin, POS, PWA invité /app et borne /pointage
+| via resources/views/partials/fonts.blade.php.
+| Métriques de repli (fontaine) pour limiter le décalage de mise en page.
+*/
+
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("/fonts/montserrat-400.woff2") format("woff2"), url("/fonts/montserrat-400.woff") format("woff"); }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("/fonts/montserrat-500.woff2") format("woff2"), url("/fonts/montserrat-500.woff") format("woff"); }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("/fonts/montserrat-600.woff2") format("woff2"), url("/fonts/montserrat-600.woff") format("woff"); }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 700; font-display: swap;
+  src: url("/fonts/montserrat-700.woff2") format("woff2"), url("/fonts/montserrat-700.woff") format("woff"); }
+
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 300; font-display: swap;
+  src: url("/fonts/poppins-300.woff2") format("woff2"), url("/fonts/poppins-300.woff") format("woff"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("/fonts/poppins-400.woff2") format("woff2"), url("/fonts/poppins-400.woff") format("woff"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("/fonts/poppins-500.woff2") format("woff2"), url("/fonts/poppins-500.woff") format("woff"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("/fonts/poppins-600.woff2") format("woff2"), url("/fonts/poppins-600.woff") format("woff"); }
+
+/* Repli métrique — évite le "saut" quand la webfont arrive. */
+@font-face { font-family: "Montserrat fallback"; src: local("Arial");
+  ascent-override: 84.95%; descent-override: 22.03%; line-gap-override: 0%; size-adjust: 113.95%; }
+@font-face { font-family: "Poppins fallback"; src: local("Arial");
+  ascent-override: 93.63%; descent-override: 31.21%; line-gap-override: 8.92%; size-adjust: 112.14%; }

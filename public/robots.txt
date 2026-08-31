@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /reservation/chambres
+Disallow: /reservation/options
+Disallow: /reservation/recapitulatif
+Disallow: /reservation/confirmation
+
+Sitemap: /sitemap.xml

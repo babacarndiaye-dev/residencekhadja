@@ -1,0 +1,319 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/*
+|--------------------------------------------------------------------------
+| Design System — Hôtel Résidence Khadija
+|--------------------------------------------------------------------------
+| Charte graphique (façade HR) :
+|   Orange Khadija #DE6443 · Orange foncé #A73514 · Anthracite #202628
+|   Gris bleu #596D7A · Blanc cassé #F4F5F3 · Gris clair #D0D4D6
+| Répartition : 60 % blanc/gris clair · 25 % anthracite · 10 % orange · 5 % accents.
+| Typo : Montserrat (titrage) · Poppins (texte).
+*/
+
+@theme {
+    --font-display: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+    /* Design plat : coins nets, séparations au filet, pas de relief. */
+    --radius-lg: 0.375rem;
+    --radius-xl: 0.5rem;
+    --radius-2xl: 0.625rem;
+    --radius-3xl: 0.75rem;
+
+    /* Orange Khadija — couleur signature (#DE6443) · orange foncé #A73514 sur 700 */
+    --color-terracotta-50:  #fcf1ed;
+    --color-terracotta-100: #f9ded3;
+    --color-terracotta-200: #f2bea9;
+    --color-terracotta-300: #ea9c7c;
+    --color-terracotta-400: #e37e5b;
+    --color-terracotta-500: #de6443;
+    --color-terracotta-600: #cb512f;
+    --color-terracotta-700: #a73514;
+    --color-terracotta-800: #852810;
+    --color-terracotta-900: #5f1e0c;
+
+    /* Anthracite / gris bleu — textes, menus, surfaces sombres (#202628 · #596D7A) */
+    --color-nuit-50:  #f2f4f5;
+    --color-nuit-100: #e3e7e9;
+    --color-nuit-200: #c7cfd3;
+    --color-nuit-300: #a2aeb4;
+    --color-nuit-400: #77878f;
+    --color-nuit-500: #596d7a;
+    --color-nuit-600: #47565f;
+    --color-nuit-700: #374249;
+    --color-nuit-800: #2a3236;
+    --color-nuit-900: #202628;
+
+    /* Laiton — repris en gris bleu doux (bandeaux d'information) */
+    --color-laiton-50:  #eef2f3;
+    --color-laiton-100: #dce3e5;
+    --color-laiton-200: #c3ced2;
+    --color-laiton-300: #9fb0b6;
+    --color-laiton-400: #7e9299;
+    --color-laiton-500: #61767d;
+    --color-laiton-600: #4c5e64;
+
+    /* Sable — blanc cassé & gris clair (#F4F5F3 · #D0D4D6) */
+    --color-sable-50:  #f8f9f7;
+    --color-sable-100: #f4f5f3;
+    --color-sable-200: #e8eae7;
+    --color-sable-300: #d0d4d6;
+    --color-sable-400: #b3b9bb;
+
+    /* Encre — corps de texte volontairement adouci (gris ardoise éditorial).
+       L'anthracite pur #202628 (= nuit-900) est réservé aux titres, aux aplats
+       sombres et à l'emphase. */
+    --color-ink: #464e58;
+    --color-ink-soft: #67717d;
+
+    /* « Élévation » plate : un filet net remplace l'ombre portée.
+       Teinte anthracite (charte), très basse opacité — un souffle, pas un trait. */
+    --shadow-card: 0 0 0 1px rgb(32 38 40 / 0.07);
+    --shadow-luxe: 0 10px 30px -16px rgb(32 38 40 / 0.18), 0 0 0 1px rgb(32 38 40 / 0.05);
+}
+
+@layer base {
+    html {
+        -webkit-text-size-adjust: 100%;
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        font-weight: 400;
+        line-height: 1.7;
+        letter-spacing: 0;
+        color: var(--color-ink);
+        background-color: var(--color-sable-50);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        /* Filet de sécurité responsive : aucun débordement horizontal de page.
+           `clip` (quand supporté) n'ouvre pas de conteneur de défilement → les
+           en-têtes `sticky` continuent de fonctionner ; `hidden` sert de repli. */
+        overflow-x: hidden;
+        overflow-x: clip;
+    }
+
+    /* Les médias ne dépassent jamais leur conteneur. */
+    img, svg, video, canvas, audio, iframe, embed, object {
+        max-width: 100%;
+    }
+
+    /* Titres : Montserrat Medium — présence sans lourdeur. Le gras reste
+       réservé aux éléments qui le demandent explicitement (font-semibold/bold). */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-optical-sizing: auto;
+        letter-spacing: -0.005em;
+        line-height: 1.2;
+        color: var(--color-nuit-800);
+        text-wrap: balance;
+    }
+
+    /* Le gras par défaut du navigateur (700) est trop appuyé avec Poppins. */
+    strong, b { font-weight: 600; }
+
+    p { text-wrap: pretty; }
+
+    :focus-visible {
+        outline: 2px solid var(--color-terracotta-600);
+        outline-offset: 3px;
+        border-radius: 3px;
+    }
+
+    ::selection {
+        background: var(--color-terracotta-200);
+        color: var(--color-nuit-900);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after {
+            animation-duration: 0.001ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.001ms !important;
+        }
+    }
+}
+
+@layer components {
+    /* Google Material Symbols — icônes de l'interface. */
+    .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined', sans-serif;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 1.25em;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        direction: ltr;
+        vertical-align: -0.15em;
+        user-select: none;
+        -webkit-font-smoothing: antialiased;
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* Filet décoratif façon motif géométrique */
+    .rule-teranga {
+        height: 1px;
+        background-image: repeating-linear-gradient(
+            90deg,
+            var(--color-laiton-400) 0 10px,
+            transparent 10px 18px
+        );
+    }
+
+    .eyebrow {
+        font-family: var(--font-sans);
+        font-weight: 500;
+        font-size: 0.75rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--color-terracotta-600);
+    }
+
+    /* Apparition douce au scroll (désactivée si reduced-motion) */
+    .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+        will-change: opacity, transform;
+    }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* Variantes directionnelles (façon WOW.js fadeInLeft / fadeInRight / fadeInUp)
+       + délai d'échelonnement via --rd (reveal-delay) posé en style inline. */
+    .reveal { transition-delay: var(--rd, 0s); }
+    .reveal--left  { transform: translateX(-40px); }
+    .reveal--right { transform: translateX(40px); }
+    .reveal--up    { transform: translateY(48px); }
+    .reveal--zoom  { transform: scale(0.92); }
+    .reveal--left.is-visible,
+    .reveal--right.is-visible,
+    .reveal--up.is-visible,
+    .reveal--zoom.is-visible { transform: none; }
+
+    /* Zoom d'image au survol (façon hvr-img-zoom-1 de RoyalKing). */
+    .hvr-zoom { overflow: hidden; }
+    .hvr-zoom > img,
+    .hvr-zoom .hvr-zoom-target {
+        transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+        will-change: transform;
+    }
+    .hvr-zoom:hover > img,
+    .hvr-zoom:hover .hvr-zoom-target { transform: scale(1.07); }
+
+    /* Effet Ken Burns sur la diapo active du hero. */
+    .kenburns { animation: hrk-kenburns 9s ease-out both; }
+    @keyframes hrk-kenburns {
+        from { transform: scale(1.12); }
+        to   { transform: scale(1); }
+    }
+
+    /* Formes décoratives (parallaxe légère + flottement). */
+    .deco-shape {
+        position: absolute;
+        border: 1px solid var(--color-terracotta-300);
+        background: transparent;
+        pointer-events: none;
+        animation: hrk-float 7s ease-in-out infinite alternate;
+    }
+    @keyframes hrk-float {
+        from { transform: translateY(-10px); }
+        to   { transform: translateY(10px); }
+    }
+
+    /* Piste de carrousel (hero + « découvrir » + témoignages). */
+    .rk-track {
+        display: flex;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .reveal,
+        .reveal--left, .reveal--right, .reveal--up, .reveal--zoom {
+            opacity: 1; transform: none; transition: none;
+        }
+        .kenburns { animation: none; }
+        .deco-shape { animation: none; }
+        .hvr-zoom > img { transition: none; }
+        .rk-track { transition: none; }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Angles vifs sur les boutons — partout SAUF la vitrine
+|--------------------------------------------------------------------------
+| Règle globale historique (hors @layer, l'emporte sur les utilitaires
+| `rounded-*`). La vitrine `[data-surface="site"]` la surcharge plus bas
+| en boutons « pilule » (spécificité supérieure).
+*/
+button,
+input[type='button'],
+input[type='submit'],
+input[type='reset'],
+a[class*='rounded-full'],
+a[class*='bg-terracotta-'],
+a[class*='bg-nuit-9'],
+a[class*='bg-nuit-8'],
+a[class*='bg-emerald-6'],
+a[class*='border-nuit-200'],
+a[class*='border-sable-300'] {
+    border-radius: 0;
+}
+[data-surface='admin'] .text-nuit-900 { color: var(--color-nuit-800); }
+
+/*
+|--------------------------------------------------------------------------
+| VITRINE & APP INVITÉ — habillage moderne, charte HRK (façade)
+|--------------------------------------------------------------------------
+| Charte : Orange Khadija #DE6443 · anthracite #202628 · blanc cassé #F4F5F3
+| (issue de l'enseigne de l'hôtel). Les couleurs et la typo (Montserrat /
+| Poppins) restent celles du `:root` — on ne redéfinit ICI que le « relief »
+| pour passer du plat à un rendu élégant : ombres douces, coins généreux,
+| boutons doucement arrondis. Portée : `<body data-surface="site">`
+| (vitrine publique + PWA invité `/app`). Le PMS /admin n'est pas touché.
+*/
+[data-surface='site'] {
+    --shadow-card: 0 12px 32px -16px rgb(32 38 40 / 0.22), 0 2px 8px -3px rgb(32 38 40 / 0.08);
+    --shadow-luxe: 0 40px 80px -32px rgb(32 38 40 / 0.30), 0 0 0 1px rgb(32 38 40 / 0.04);
+    --radius-lg: 0.625rem;
+    --radius-xl: 0.9rem;
+    --radius-2xl: 1.15rem;
+    --radius-3xl: 1.6rem;
+}
+
+/* Coins doucement arrondis (au lieu de l'angle vif du back-office). */
+[data-surface='site'] button,
+[data-surface='site'] .btn,
+[data-surface='site'] a[class*='bg-terracotta-'],
+[data-surface='site'] a[class*='bg-nuit-'],
+[data-surface='site'] a[class*='bg-emerald-'],
+[data-surface='site'] a[class*='border-nuit-'],
+[data-surface='site'] a[class*='border-sable-'],
+[data-surface='site'] input,
+[data-surface='site'] select,
+[data-surface='site'] textarea {
+    border-radius: var(--radius-lg);
+}
+/* Les pastilles explicitement `rounded-full` restent des pilules. */
+[data-surface='site'] a[class*='rounded-full'],
+[data-surface='site'] button[class*='rounded-full'] {
+    border-radius: 9999px;
+}
+
+/* Anthracite pur adouci pour le texte courant (titres de carte, emphases). */
+[data-surface='site'] .text-nuit-900,
+[data-surface='admin'] .text-nuit-900 {
+    color: var(--color-nuit-800);
+}

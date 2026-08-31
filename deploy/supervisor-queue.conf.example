@@ -1,0 +1,22 @@
+; Worker de file d'attente Laravel — à copier dans /etc/supervisor/conf.d/
+; puis :  supervisorctl reread && supervisorctl update && supervisorctl start khadija-queue:*
+;
+; En dev / XAMPP on s'en passe : routes/console.php vide la file chaque minute
+; (queue:work --stop-when-empty). En production, préférez ce worker permanent.
+
+[program:khadija-queue]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/khadija/artisan queue:work database --sleep=3 --tries=3 --max-time=3600 --max-jobs=1000
+directory=/var/www/khadija
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/khadija/storage/logs/queue-worker.log
+stopwaitsecs=3600
+
+; Planificateur (cron) — dans la crontab de www-data :
+; * * * * * cd /var/www/khadija && php artisan schedule:run >> /dev/null 2>&1

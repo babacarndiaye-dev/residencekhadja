@@ -1,0 +1,16 @@
+---
+# cPanel « Git Version Control » — tâches exécutées au clic sur « Deploy HEAD Commit ».
+#
+# Ce fichier suppose le montage RECOMMANDÉ : le dépôt est cloné DIRECTEMENT comme
+# répertoire de l'application (ex. ~/laravel/residence-khadija) et le sous-domaine
+# residencekhadija.pits.sn pointe sur .../residence-khadija/public.
+# « Update from Remote » fait le git pull, puis « Deploy HEAD Commit » lance ceci.
+#
+# Si votre hébergeur clone dans ~/repositories/... et déploie ailleurs, décommentez
+# le bloc rsync et adaptez DEPLOYPATH.
+deployment:
+  tasks:
+    # - export DEPLOYPATH=/home/CPANELUSER/laravel/residence-khadija
+    # - /bin/rsync -a --delete --exclude='.git' --exclude='.env' --exclude='storage/' ./ "$DEPLOYPATH/"
+    # - cd "$DEPLOYPATH"
+    - /bin/bash deploy/deploy.sh

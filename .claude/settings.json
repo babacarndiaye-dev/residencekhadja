@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -r ' *)",
+      "Bash(grep -oE \"ERROR: [^{]{0,120}\")",
+      "Bash(./vendor/bin/pint app/Http/Controllers/Admin/RoomController.php app/Models/Room.php tests/Feature/RoomsManagementTest.php routes/web.php)",
+      "Bash(./vendor/bin/pint tests/Feature/AdminNavTest.php)",
+      "Bash(grep -n 'sous-menu\\\\|sous menu\\\\|regroup\\\\|nav.blade\\\\|partials/nav\\\\|sidebar\\\\|barre latérale\\\\|$sections\\\\|localStorage\\\\['\\\\''nav' README.md)",
+      "Bash(sed -i '' 's/font-display text-xl font-semibold/font-display text-2xl font-semibold/g' dashboard.blade.php distribution/index.blade.php events/pipeline.blade.php)",
+      "Bash(sed -i '' 's/font-display text-xl font-semibold/font-display text-lg font-semibold/g' bi/report.blade.php marketing/show.blade.php events/calendar.blade.php)",
+      "Bash(sed -i '' 's/# 163 tests/# 165 tests/; s/163 tests, suite/165 tests, suite/' README.md)",
+      "Bash(sed -i '' 's/163 tests/165 tests/' \"/Users/cellulecom/.claude/projects/-Applications-XAMPP-xamppfiles-htdocs-Residence-Khadija/memory/MEMORY.md\")",
+      "Bash(sed -n '/function send/,/^    }/p' app/Http/Controllers/Admin/EventQuoteController.php)",
+      "Bash(sed -n '/function send/,/^    }/p' app/Http/Controllers/Admin/MarketingController.php)",
+      "Bash(composer dump-autoload *)",
+      "Bash(./vendor/bin/pint app/ tests/ database/ config/ routes/)",
+      "Bash(python3 -c \"import sys,json; d=json.loads\\(sys.stdin.read\\(\\).split\\(chr\\(10\\)\\)[0]\\); print\\('pint result:', d['result']\\); [print\\(' ', f['path'], '→', ','.join\\(f['fixers']\\)\\) for f in d.get\\('files',[]\\)]\")",
+      "Bash(php -r '$d=json_decode\\(file_get_contents\\($argv[1]\\),true\\); echo \"result: {$d[\"tool\"]} / {$d[\"result\"]}\\\\n\"; echo \"files changed: \".count\\($d[\"files\"]\\).\"\\\\n\"; foreach\\($d[\"files\"] as $f\\){ echo \"  \".$f[\"path\"].\"\\\\n\"; }' /Users/cellulecom/.claude/projects/-Applications-XAMPP-xamppfiles-htdocs-Residence-Khadija/0830d8ba-404f-4021-834b-b1db8b0e01d3/tool-results/bbdd0r4pb.txt)",
+      "Bash(sed -i '' 's/\\\\$message->/\\\\$contactMessage->/g' resources/views/emails/contact-message.blade.php)",
+      "Bash(grep -n 'contactMessage\\\\|$message' resources/views/emails/contact-message.blade.php)",
+      "Bash(grep -n \"165 tests\\\\|165 tests, suite\\\\|# 165\\\\|AdminNavTest.php\\\\`\" README.md)",
+      "Bash(./vendor/bin/pint --test app/Support/WebhookSignature.php app/Mail/ContactMessageReceived.php app/Models/ContactMessage.php app/Http/Controllers/ContactController.php app/Http/Controllers/Admin/ContactMessageController.php app/Http/Controllers/ChannelController.php app/Http/Controllers/PaymentCheckoutController.php tests/Feature/ContactMessagesTest.php)",
+      "Bash(./vendor/bin/pint app/Mail app/Services/Sms.php app/Services/CampaignDispatcher.php app/Services/PaymentGateway.php app/Console/Commands/BiRunSchedules.php app/Http/Controllers/Admin/EventQuoteController.php app/Models/EventQuote.php config/marketing.php database/migrations/2026_08_29_240001_add_sent_at_to_event_quotes.php tests/Feature/PaymentsTest.php tests/Feature/CrmTest.php tests/Feature/EventsTest.php tests/Feature/BiTest.php)",
+      "Bash(grep -nA15 '\"require-dev\"' composer.json)",
+      "Bash(grep -nA20 '\"scripts\"' composer.json)",
+      "Bash(php -v)",
+      "Bash(./vendor/bin/pint --test)",
+      "Bash(sed -n '/public function cancel/,/^    }/p' app/Http/Controllers/Admin/ReservationController.php)",
+      "Bash(sed -n '/public function checkOut/,/^    }/p' app/Http/Controllers/Admin/ReservationController.php)",
+      "Bash(grep -n 'guarded\\\\|fillable\\\\|protected $casts\\\\|confirmed_at\\\\|=> '\\\\''datetime'\\\\''\\\\|checked_out_at' app/Models/Reservation.php)",
+      "Bash(grep -rn 'Table 1 —\\\\|Table {\\\\|— {$venue\\\\|->label\\\\b.*Table\\\\|assertSee\\('\\\\''Table' tests/ resources/views/pages/qr/)",
+      "Bash(vendor/bin/pint app/ database/ config/)",
+      "Bash(grep -n 'slug.*=>.*'\\\\''\\\\|Venue::updateOrCreate\\\\|$v\\\\['\\\\''slug'\\\\''\\\\]' database/seeders/DiningSeeder.php)",
+      "Bash(vendor/bin/pint tests/Feature/Pos2Test.php)",
+      "Bash(grep -oE '\"test\":\"[^\"]*Pos2Test[^\"]*\"|\"message\":\"[^\"]{0,400}' \"/Users/cellulecom/.claude/projects/-Applications-XAMPP-xamppfiles-htdocs-Residence-Khadija/8e4b1f3d-24bd-4881-9702-99137b109094/tool-results/bz3v9tnk9.txt\")",
+      "Bash(grep -oE '\"message\":\"[^\"]{0,700}' \"/Users/cellulecom/.claude/projects/-Applications-XAMPP-xamppfiles-htdocs-Residence-Khadija/8e4b1f3d-24bd-4881-9702-99137b109094/tool-results/bz3v9tnk9.txt\")"
+    ]
+  }
+}
