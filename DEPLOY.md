@@ -128,9 +128,16 @@ déjà rempli avec la base `pitssn1_residencekhadija`) est le modèle prêt à l
 
 ```sh
 cd ~/laravel/residence-khadija
-php artisan key:generate          # renseigne APP_KEY dans .env
+php artisan key:generate --force  # --force : sans confirmation en production
+grep '^APP_KEY=' .env            # doit afficher APP_KEY=base64:...
+php artisan config:clear          # au cas où une config vide aurait été mise en cache
 php artisan about                 # doit afficher env=production, debug=false
 ```
+
+> **`APP_KEY` vide = HTTP 500 « No application encryption key » sur toutes les
+> pages.** Si ça arrive : `php artisan key:generate --force` puis
+> `php artisan optimize:clear && php artisan config:cache` (la clé était peut-être
+> figée dans `bootstrap/cache/config.php`). `deploy/deploy.sh` gère désormais ce cas.
 
 Points déjà positionnés dans le modèle : `APP_ENV=production`, `APP_DEBUG=false`,
 `APP_URL=https://residencekhadija.pits.sn`, `SESSION_SECURE_COOKIE=true`,

@@ -24,6 +24,13 @@ fi
 PHP_BIN="${PHP_BIN:-php}"
 echo "==> PHP : $($PHP_BIN -v | head -n1)"
 
+# APP_KEY manquante => 500 « No application encryption key » sur chaque page.
+# On la génère une seule fois (jamais d'écrasement d'une clé existante).
+if ! grep -qE '^APP_KEY=base64:.+' .env; then
+    echo "==> APP_KEY absente — génération"
+    $PHP_BIN artisan key:generate --force
+fi
+
 echo "==> Mode maintenance"
 $PHP_BIN artisan down --render="errors::503" --retry=15 || true
 trap '$PHP_BIN artisan up || true' EXIT
